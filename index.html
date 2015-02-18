@@ -33,10 +33,10 @@
 
 <p>wSQL - angularJS active record module for WebSQLite database - database in the browser. U can persist your data for your PhoneGap HTML5 applications build with ionic or angular. Good solution for mobile applications with offline mode.</p>
 
-<h2>
-<a id="install-from-bower" class="anchor" href="#install-from-bower" aria-hidden="true"><span class="octicon octicon-link"></span></a>install from bower</h2>
+<h3>
+<a id="install-from-bower" class="anchor" href="#install-from-bower" aria-hidden="true"><span class="octicon octicon-link"></span></a>install from bower</h3>
 
-<p>bower install w-sql</p>
+<p>bower install angular-wsql</p>
 
 <h3>
 <a id="a-sample-of-config-fileu-need-to-set-your-db-schema-there-can-be-found-in-this-repo-at-srcwsqldbconfigjs-just-cope-it-in-your-project" class="anchor" href="#a-sample-of-config-fileu-need-to-set-your-db-schema-there-can-be-found-in-this-repo-at-srcwsqldbconfigjs-just-cope-it-in-your-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>A sample of config file(u need to set your DB schema there) can be found in this repo at src/wSQL.db.config.js (just cope it in your project)</h3>
@@ -45,11 +45,26 @@
 <a id="methods" class="anchor" href="#methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>methods:</h3>
 
 <ul>
-<li>wSQL.select...</li>
-<li>wSQL.insert...</li>
-<li>wSQL.batch_insert...</li>
-<li>wSQL.update...</li>
-<li>wSQL.delete...</li>
+<li>wSQL.select()</li>
+<li>wSQL.insert(table_name, data)</li>
+<li>wSQL.batch_insert(table_name, data)</li>
+<li>wSQL.update(table_name, data)</li>
+<li>wSQL.delete(table_name)</li>
+</ul>
+
+<h3>
+<a id="optionally-u-can-perform-query-directly-with-passing-sql" class="anchor" href="#optionally-u-can-perform-query-directly-with-passing-sql" aria-hidden="true"><span class="octicon octicon-link"></span></a>optionally u can perform query directly with passing SQL</h3>
+
+<ul>
+<li>wSQL.query(custom_sql)</li>
+</ul>
+
+<h3>
+<a id="optionally-u-can-perform-queries-upon-tables" class="anchor" href="#optionally-u-can-perform-queries-upon-tables" aria-hidden="true"><span class="octicon octicon-link"></span></a>optionally u can perform queries upon tables</h3>
+
+<ul>
+<li>wSQL.create_table(table_name, table_fields)</li>
+<li>wSQL.drop_table(table_name)</li>
 </ul>
 
 <h3>
@@ -72,8 +87,8 @@
     })
 </pre></div>
 
-<h1>
-<a id="list-of-query-modifiers" class="anchor" href="#list-of-query-modifiers" aria-hidden="true"><span class="octicon octicon-link"></span></a>list of query modifiers:</h1>
+<h3>
+<a id="list-of-query-modifiers" class="anchor" href="#list-of-query-modifiers" aria-hidden="true"><span class="octicon octicon-link"></span></a>list of query modifiers:</h3>
 
 <ul>
 <li>where</li>
@@ -85,23 +100,22 @@
 <li>join</li>
 <li>left_join</li>
 <li>having</li>
+<li>set</li>
 <li>group_by</li>
 <li>order_by</li>
 <li>limit //limit also does offset as a second argument</li>
 </ul>
 
-<h3>
-<a id="no-full-doc-yet-but-samples-below----pretty-simple" class="anchor" href="#no-full-doc-yet-but-samples-below----pretty-simple" aria-hidden="true"><span class="octicon octicon-link"></span></a>no full DOC yet but samples below -- pretty simple</h3>
+<h2>
+<a id="no-full-doc-yet-but-samples-below----pretty-simple" class="anchor" href="#no-full-doc-yet-but-samples-below----pretty-simple" aria-hidden="true"><span class="octicon octicon-link"></span></a>no full DOC yet but samples below -- pretty simple</h2>
 
-<h3>
-<a id="also-examples-can-be-found-in-examplesexample1" class="anchor" href="#also-examples-can-be-found-in-examplesexample1" aria-hidden="true"><span class="octicon octicon-link"></span></a>also examples can be found in examples/example1</h3>
+<h2>
+<a id="also-examples-can-be-found-in-examplesexample1" class="anchor" href="#also-examples-can-be-found-in-examplesexample1" aria-hidden="true"><span class="octicon octicon-link"></span></a>also examples can be found in examples/example1</h2>
 
 <div class="highlight highlight-javascript"><pre>angular.module(<span class="pl-s1"><span class="pl-pds">'</span>sampleApp<span class="pl-pds">'</span></span>, [
     <span class="pl-s1"><span class="pl-pds">"</span>wSQL.db<span class="pl-pds">"</span></span>
 ])
 .controller(<span class="pl-s1"><span class="pl-pds">'</span>SampleController<span class="pl-pds">'</span></span>, <span class="pl-st">function</span>(<span class="pl-vpf">$scope</span>, <span class="pl-vpf">wSQL</span>) {
-
-    <span class="pl-en">console</span><span class="pl-s3">.log</span>(wSQL);
 
     <span class="pl-c">// SELECT id, category_id FROM table1 WHERE id=? LIMIT 1</span>
     wSQL.<span class="pl-s3">select</span>(<span class="pl-s1"><span class="pl-pds">"</span>id, category_id<span class="pl-pds">"</span></span>)
@@ -214,6 +228,114 @@
         .query()
         .then(<span class="pl-st">function</span>(<span class="pl-vpf">data</span>){
             <span class="pl-en">console</span><span class="pl-s3">.log</span>(data);
+        });
+
+    <span class="pl-c">/**</span>
+<span class="pl-c">     * Direct Queries</span>
+<span class="pl-c">     * (better to use ORM stuff)</span>
+<span class="pl-c">      */</span>
+    <span class="pl-c">// Simple direct query</span>
+    wSQL.query(<span class="pl-s1"><span class="pl-pds">"</span>SELECT * FROM table1<span class="pl-pds">"</span></span>).then(<span class="pl-st">function</span>(<span class="pl-vpf">result</span>){
+        <span class="pl-en">console</span><span class="pl-s3">.log</span>(result);
+    });
+
+    <span class="pl-c">// Direct Query with params in SQL</span>
+    wSQL.query(<span class="pl-s1"><span class="pl-pds">"</span>SELECT * FROM table1 WHERE id IN (1,5)<span class="pl-pds">"</span></span>).then(<span class="pl-st">function</span>(<span class="pl-vpf">result</span>){
+        <span class="pl-en">console</span><span class="pl-s3">.log</span>(result);
+    });
+
+    <span class="pl-c">// Pass query params in second argument to avoid escape errors</span>
+    wSQL.query(<span class="pl-s1"><span class="pl-pds">"</span>SELECT * FROM table1 WHERE category_name=?<span class="pl-pds">"</span></span>, [<span class="pl-s1"><span class="pl-pds">"</span>'♥,♥,|'♥,♥,♥'<span class="pl-pds">"</span></span>]).then(<span class="pl-st">function</span>(<span class="pl-vpf">result</span>){
+        <span class="pl-en">console</span><span class="pl-s3">.log</span>(result);
+    });
+
+    <span class="pl-c">// Or u can get error</span>
+    wSQL.query(<span class="pl-s1"><span class="pl-pds">"</span>SELECT * FROM table1 WHERE category_name= '♥,♥,|'♥,♥,♥'<span class="pl-pds">"</span></span>).then(<span class="pl-st">function</span>(<span class="pl-vpf">result</span>){
+        <span class="pl-en">console</span><span class="pl-s3">.log</span>(result);
+    }, <span class="pl-st">function</span>(<span class="pl-vpf">error</span>){
+        <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s1"><span class="pl-pds">"</span>___error<span class="pl-pds">"</span></span>);
+        <span class="pl-en">console</span><span class="pl-s3">.log</span>(error);
+    });
+
+    <span class="pl-c">/**</span>
+<span class="pl-c">     * Like Queries</span>
+<span class="pl-c">     */</span>
+
+    wSQL.<span class="pl-s3">select</span>()
+        .from(<span class="pl-s1"><span class="pl-pds">"</span>table1<span class="pl-pds">"</span></span>)
+        .like(<span class="pl-s1"><span class="pl-pds">"</span>category_name<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>my_query<span class="pl-pds">"</span></span>)
+        .query()
+        .then(<span class="pl-st">function</span>(<span class="pl-vpf">d</span>){
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(d);
+        });
+
+    wSQL.<span class="pl-s3">select</span>()
+        .from(<span class="pl-s1"><span class="pl-pds">"</span>table1<span class="pl-pds">"</span></span>)
+        .like(<span class="pl-s1"><span class="pl-pds">"</span>category_name<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>query<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>before<span class="pl-pds">"</span></span>)
+        .query()
+        .then(<span class="pl-st">function</span>(<span class="pl-vpf">d</span>){
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(d);
+        });
+
+    wSQL.<span class="pl-s3">select</span>()
+        .from(<span class="pl-s1"><span class="pl-pds">"</span>table1<span class="pl-pds">"</span></span>)
+        .like(<span class="pl-s1"><span class="pl-pds">"</span>category_name<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>my_<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>after<span class="pl-pds">"</span></span>)
+        .query()
+        .then(<span class="pl-st">function</span>(<span class="pl-vpf">d</span>){
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(d);
+        });
+
+    wSQL.<span class="pl-s3">select</span>()
+        .from(<span class="pl-s1"><span class="pl-pds">"</span>table1<span class="pl-pds">"</span></span>)
+        .like(<span class="pl-s1"><span class="pl-pds">"</span>category_name<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>y_quer<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>both<span class="pl-pds">"</span></span>)
+        .query()
+        .then(<span class="pl-st">function</span>(<span class="pl-vpf">d</span>){
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(d);
+        });
+
+    wSQL.<span class="pl-s3">select</span>()
+        .from(<span class="pl-s1"><span class="pl-pds">"</span>table1<span class="pl-pds">"</span></span>)
+        .like(<span class="pl-s1"><span class="pl-pds">"</span>category_name<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>%query<span class="pl-pds">"</span></span>, <span class="pl-c1">false</span>)
+        .query()
+        .then(<span class="pl-st">function</span>(<span class="pl-vpf">d</span>){
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(d);
+        });
+
+    wSQL.<span class="pl-s3">select</span>()
+        .from(<span class="pl-s1"><span class="pl-pds">"</span>table1<span class="pl-pds">"</span></span>)
+        .like(<span class="pl-s1"><span class="pl-pds">"</span>category_name<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>s<span class="pl-pds">"</span></span>)
+        .and_like(<span class="pl-s1"><span class="pl-pds">"</span>test_field<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>field4<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>before<span class="pl-pds">"</span></span>)
+        .query()
+        .then(<span class="pl-st">function</span>(<span class="pl-vpf">d</span>){
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(d);
+        });
+
+    wSQL.<span class="pl-s3">select</span>()
+        .from(<span class="pl-s1"><span class="pl-pds">"</span>table1<span class="pl-pds">"</span></span>)
+        .like(<span class="pl-s1"><span class="pl-pds">"</span>category_name<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>s<span class="pl-pds">"</span></span>)
+        .like(<span class="pl-s1"><span class="pl-pds">"</span>test_field<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>field4<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>before<span class="pl-pds">"</span></span>)
+        .query()
+        .then(<span class="pl-st">function</span>(<span class="pl-vpf">d</span>){
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(d);
+        });
+
+    wSQL.<span class="pl-s3">select</span>()
+        .from(<span class="pl-s1"><span class="pl-pds">"</span>table1<span class="pl-pds">"</span></span>)
+        .like(<span class="pl-s1"><span class="pl-pds">"</span>category_name<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>s<span class="pl-pds">"</span></span>)
+        .or_like(<span class="pl-s1"><span class="pl-pds">"</span>test_field<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>field4<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>before<span class="pl-pds">"</span></span>)
+        .query()
+        .then(<span class="pl-st">function</span>(<span class="pl-vpf">d</span>){
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(d);
+        });
+
+    wSQL.<span class="pl-s3">select</span>()
+        .from(<span class="pl-s1"><span class="pl-pds">"</span>table1<span class="pl-pds">"</span></span>)
+        .where(<span class="pl-s1"><span class="pl-pds">"</span>test_field<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>test_field4<span class="pl-pds">"</span></span>)
+        .like(<span class="pl-s1"><span class="pl-pds">"</span>category_name<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>s<span class="pl-pds">"</span></span>)
+        .or_like(<span class="pl-s1"><span class="pl-pds">"</span>test_field<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>field4<span class="pl-pds">"</span></span>, <span class="pl-s1"><span class="pl-pds">"</span>before<span class="pl-pds">"</span></span>)
+        .query()
+        .then(<span class="pl-st">function</span>(<span class="pl-vpf">d</span>){
+            <span class="pl-en">console</span><span class="pl-s3">.log</span>(d);
         });
 
 });
